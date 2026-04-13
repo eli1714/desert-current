@@ -1,0 +1,38 @@
+# Operating system and editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dependencies and build output
+node_modules/
+vendor/
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# WordPress core files
+/wp-admin/
+/wp-includes/
+/index.php
+/license.txt
+/readme.html
+/xmlrpc.php
+/wp-*.php
+
+# WordPress content we do not want to version
+/wp-content/uploads/
+/wp-content/cache/
+/wp-content/upgrade/
+/wp-content/backups/
+/wp-content/languages/
+/wp-content/plugins/
+
+# Track only the custom theme folder
+/wp-content/themes/*
+!/wp-content/themes/desert-current/
+!/wp-content/themes/desert-current/**
