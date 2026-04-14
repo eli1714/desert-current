@@ -62,5 +62,15 @@ function desert_current_menu_fallback() {
 	echo '<ul class="menu-list">';
 	echo '<li><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Home', 'desert-current' ) . '</a></li>';
 	echo '<li><a href="' . esc_url( $stories_url ) . '">' . esc_html( $stories_label ) . '</a></li>';
+	echo '<li><a href="' . esc_url( home_url( '/about/' ) ) . '">' . esc_html__( 'About', 'desert-current' ) . '</a></li>';
+	echo '<li><a href="' . esc_url( home_url( '/contact/' ) ) . '">' . esc_html__( 'Contact', 'desert-current' ) . '</a></li>';
+	echo '</ul>';
+}
+
+function desert_current_footer_menu_fallback() {
+	echo '<ul class="footer-menu">';
+	echo '<li><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Home', 'desert-current' ) . '</a></li>';
+	echo '<li><a href="' . esc_url( home_url( '/about/' ) ) . '">' . esc_html__( 'About', 'desert-current' ) . '</a></li>';
+	echo '<li><a href="' . esc_url( home_url( '/contact/' ) ) . '">' . esc_html__( 'Contact', 'desert-current' ) . '</a></li>';
 	echo '</ul>';
 }
