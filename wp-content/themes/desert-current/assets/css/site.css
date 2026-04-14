@@ -546,6 +546,18 @@ a:focus {
   margin-bottom: 1.5rem;
 }
 
+.section-header__top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: end;
+  gap: 0.9rem 1.5rem;
+}
+
+.section-header__copy {
+  max-width: 42rem;
+}
+
 .section-title {
   margin: 0 0 0.5rem;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
@@ -556,6 +568,21 @@ a:focus {
 .entry-meta,
 .story-card__meta {
   margin: 0;
+}
+
+.section-header__link {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--sun-dark);
+  transition: color var(--transition-soft);
+}
+
+.section-header__link:hover,
+.section-header__link:focus {
+  color: var(--sun);
 }
 
 .section-intro,
@@ -1327,6 +1354,10 @@ a:focus {
 
   .event-card__title {
     font-size: 1.55rem;
+  }
+
+  .section-header__top {
+    align-items: start;
   }
 }
 

@@ -1,18 +1,38 @@
 <?php
 /**
- * Placeholder event card for the homepage.
+ * Event card for the homepage.
  *
  * @package DesertCurrent
  */
 
-$month       = $args['month'] ?? '';
-$day         = $args['day'] ?? '';
-$title       = $args['title'] ?? '';
-$schedule    = $args['schedule'] ?? '';
-$location    = $args['location'] ?? '';
-$description = $args['description'] ?? '';
-$link_label  = $args['link_label'] ?? '';
-$link_url    = $args['link_url'] ?? '';
+$event = array();
+
+if ( ! empty( $args ) ) {
+	$event = $args;
+} else {
+	$event_details = desert_current_get_event_details();
+	$timestamp     = $event_details['date'] ? strtotime( $event_details['date'] ) : false;
+
+	$event = array(
+		'month'       => $timestamp ? wp_date( 'M', $timestamp ) : '',
+		'day'         => $timestamp ? wp_date( 'd', $timestamp ) : '',
+		'title'       => get_the_title(),
+		'schedule'    => $timestamp ? wp_date( 'l, F j, Y', $timestamp ) : '',
+		'location'    => $event_details['location'],
+		'description' => get_the_excerpt(),
+		'link_label'  => __( 'Event details', 'desert-current' ),
+		'link_url'    => get_permalink(),
+	);
+}
+
+$month       = $event['month'] ?? '';
+$day         = $event['day'] ?? '';
+$title       = $event['title'] ?? '';
+$schedule    = $event['schedule'] ?? '';
+$location    = $event['location'] ?? '';
+$description = $event['description'] ?? '';
+$link_label  = $event['link_label'] ?? '';
+$link_url    = $event['link_url'] ?? '';
 ?>
 
 <article class="event-card">

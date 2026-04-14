@@ -30,6 +30,7 @@ $top_story_ids = wp_list_pluck( $top_stories->posts, 'ID' );
 
 $posts_page_id = (int) get_option( 'page_for_posts' );
 $stories_url   = $posts_page_id ? get_permalink( $posts_page_id ) : home_url( '/' );
+$events_url    = get_post_type_archive_link( 'event' );
 
 $latest_articles = new WP_Query(
 	array(
@@ -40,37 +41,23 @@ $latest_articles = new WP_Query(
 	)
 );
 
-$featured_events = array(
+$featured_events = new WP_Query(
 	array(
-		'month'       => 'APR',
-		'day'         => '17',
-		'title'       => 'Desert Sounds on Main Street',
-		'schedule'    => 'Friday, 6:30 PM to 9:00 PM',
-		'location'    => 'Main Street Plaza',
-		'description' => 'An outdoor music night with local performers, food stalls, and shaded seating for families.',
-		'link_label'  => 'Event details',
-		'link_url'    => home_url( '/events/' ),
-	),
-	array(
-		'month'       => 'APR',
-		'day'         => '19',
-		'title'       => 'West Mesa Makers Market',
-		'schedule'    => 'Sunday, 8:00 AM to 1:00 PM',
-		'location'    => 'West Mesa Community Park',
-		'description' => 'A weekend market featuring neighborhood artists, vintage sellers, and small-batch food vendors.',
-		'link_label'  => 'Event details',
-		'link_url'    => home_url( '/events/' ),
-	),
-	array(
-		'month'       => 'APR',
-		'day'         => '23',
-		'title'       => 'Public Art Walk and Panel',
-		'schedule'    => 'Thursday, 7:00 PM',
-		'location'    => 'Rail Yard Arts District',
-		'description' => 'A guided evening walk through downtown murals followed by a conversation with local artists.',
-		'link_label'  => 'Event details',
-		'link_url'    => home_url( '/events/' ),
-	),
+		'post_type'      => 'event',
+		'posts_per_page' => 3,
+		'post_status'    => 'publish',
+		'meta_key'       => '_desert_current_event_date',
+		'orderby'        => 'meta_value',
+		'order'          => 'ASC',
+		'meta_query'     => array(
+			array(
+				'key'     => '_desert_current_event_date',
+				'value'   => current_time( 'Y-m-d' ),
+				'compare' => '>=',
+				'type'    => 'DATE',
+			),
+		),
+	)
 );
 
 $community_spotlight = array(
@@ -201,16 +188,26 @@ $newsletter_callout = array(
 				null,
 				array(
 					'title' => __( 'Featured Local Events', 'desert-current' ),
-					'intro' => __( 'These placeholder events help the homepage feel realistic now, and they can later be replaced with a real Events content type.', 'desert-current' ),
+					'intro' => __( 'A quick look at upcoming markets, music nights, art walks, and neighborhood gatherings.', 'desert-current' ),
+					'action_label' => __( 'View all events', 'desert-current' ),
+					'action_url'   => $events_url ? $events_url : home_url( '/events/' ),
 				)
 			);
 			?>
 
-			<div class="event-grid">
-				<?php foreach ( $featured_events as $event ) : ?>
-					<?php get_template_part( 'template-parts/components/event-card', null, $event ); ?>
-				<?php endforeach; ?>
-			</div>
+			<?php if ( $featured_events->have_posts() ) : ?>
+				<div class="event-grid">
+					<?php
+					while ( $featured_events->have_posts() ) :
+						$featured_events->the_post();
+						get_template_part( 'template-parts/components/event-card' );
+					endwhile;
+					wp_reset_postdata();
+					?>
+				</div>
+			<?php else : ?>
+				<?php get_template_part( 'template-parts/content/content', 'none' ); ?>
+			<?php endif; ?>
 		</div>
 	</section>
 
