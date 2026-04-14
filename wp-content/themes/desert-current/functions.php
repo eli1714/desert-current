@@ -81,3 +81,132 @@ function desert_current_footer_menu_fallback() {
 	echo '<li><a href="' . esc_url( home_url( '/contact/' ) ) . '">' . esc_html__( 'Contact', 'desert-current' ) . '</a></li>';
 	echo '</ul>';
 }
+
+function desert_current_register_event_post_type() {
+	$labels = array(
+		'name'               => __( 'Events', 'desert-current' ),
+		'singular_name'      => __( 'Event', 'desert-current' ),
+		'menu_name'          => __( 'Events', 'desert-current' ),
+		'name_admin_bar'     => __( 'Event', 'desert-current' ),
+		'add_new'            => __( 'Add Event', 'desert-current' ),
+		'add_new_item'       => __( 'Add New Event', 'desert-current' ),
+		'edit_item'          => __( 'Edit Event', 'desert-current' ),
+		'new_item'           => __( 'New Event', 'desert-current' ),
+		'view_item'          => __( 'View Event', 'desert-current' ),
+		'view_items'         => __( 'View Events', 'desert-current' ),
+		'search_items'       => __( 'Search Events', 'desert-current' ),
+		'not_found'          => __( 'No events found.', 'desert-current' ),
+		'not_found_in_trash' => __( 'No events found in Trash.', 'desert-current' ),
+		'all_items'          => __( 'All Events', 'desert-current' ),
+		'archives'           => __( 'Event Archives', 'desert-current' ),
+	);
+
+	register_post_type(
+		'event',
+		array(
+			'labels'       => $labels,
+			'public'       => true,
+			'has_archive'  => true,
+			'rewrite'      => array( 'slug' => 'events' ),
+			'show_in_rest' => true,
+			'menu_icon'    => 'dashicons-calendar-alt',
+			'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt', 'revisions' ),
+		)
+	);
+}
+add_action( 'init', 'desert_current_register_event_post_type' );
+
+function desert_current_add_event_details_meta_box() {
+	add_meta_box(
+		'desert-current-event-details',
+		__( 'Event Details', 'desert-current' ),
+		'desert_current_render_event_details_meta_box',
+		'event',
+		'normal',
+		'high'
+	);
+}
+add_action( 'add_meta_boxes', 'desert_current_add_event_details_meta_box' );
+
+function desert_current_render_event_details_meta_box( $post ) {
+	$event_date = get_post_meta( $post->ID, '_desert_current_event_date', true );
+	$location   = get_post_meta( $post->ID, '_desert_current_event_location', true );
+
+	wp_nonce_field( 'desert_current_save_event_details', 'desert_current_event_details_nonce' );
+	?>
+	<p>
+		<label for="desert-current-event-date"><strong><?php esc_html_e( 'Event date', 'desert-current' ); ?></strong></label>
+		<br>
+		<input id="desert-current-event-date" name="desert_current_event_date" type="date" value="<?php echo esc_attr( $event_date ); ?>">
+	</p>
+
+	<p>
+		<label for="desert-current-event-location"><strong><?php esc_html_e( 'Location', 'desert-current' ); ?></strong></label>
+		<br>
+		<input id="desert-current-event-location" name="desert_current_event_location" type="text" class="widefat" value="<?php echo esc_attr( $location ); ?>">
+	</p>
+	<?php
+}
+
+function desert_current_save_event_details( $post_id ) {
+	if ( ! isset( $_POST['desert_current_event_details_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['desert_current_event_details_nonce'] ) ), 'desert_current_save_event_details' ) ) {
+		return;
+	}
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	if ( isset( $_POST['desert_current_event_date'] ) ) {
+		update_post_meta(
+			$post_id,
+			'_desert_current_event_date',
+			sanitize_text_field( wp_unslash( $_POST['desert_current_event_date'] ) )
+		);
+	}
+
+	if ( isset( $_POST['desert_current_event_location'] ) ) {
+		update_post_meta(
+			$post_id,
+			'_desert_current_event_location',
+			sanitize_text_field( wp_unslash( $_POST['desert_current_event_location'] ) )
+		);
+	}
+}
+add_action( 'save_post_event', 'desert_current_save_event_details' );
+
+function desert_current_sort_event_archive( $query ) {
+	if ( is_admin() || ! $query->is_main_query() || ! $query->is_post_type_archive( 'event' ) ) {
+		return;
+	}
+
+	$query->set( 'meta_key', '_desert_current_event_date' );
+	$query->set( 'orderby', 'meta_value' );
+	$query->set( 'order', 'ASC' );
+}
+add_action( 'pre_get_posts', 'desert_current_sort_event_archive' );
+
+function desert_current_get_event_details( $post_id = 0 ) {
+	$post_id    = $post_id ? $post_id : get_the_ID();
+	$event_date = get_post_meta( $post_id, '_desert_current_event_date', true );
+	$location   = get_post_meta( $post_id, '_desert_current_event_location', true );
+	$formatted  = '';
+
+	if ( $event_date ) {
+		$timestamp = strtotime( $event_date );
+
+		if ( $timestamp ) {
+			$formatted = wp_date( 'F j, Y', $timestamp );
+		}
+	}
+
+	return array(
+		'date'      => $event_date,
+		'formatted' => $formatted,
+		'location'  => $location,
+	);
+}
