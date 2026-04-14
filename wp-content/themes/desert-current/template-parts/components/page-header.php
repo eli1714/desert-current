@@ -19,7 +19,9 @@ if ( ! in_array( $level, array( 'h1', 'h2', 'h3' ), true ) ) {
 ?>
 
 <header class="section-header">
-	<?php printf( '<%1$s class="section-title">%2$s</%1$s>', esc_html( $level ), esc_html( $title ) ); ?>
+	<?php printf( '<%s class="section-title">', esc_html( $level ) ); ?>
+	<?php echo wp_kses( $title, array( 'span' => array( 'class' => true ) ) ); ?>
+	<?php printf( '</%s>', esc_html( $level ) ); ?>
 
 	<?php if ( $intro ) : ?>
 		<p class="section-intro"><?php echo esc_html( $intro ); ?></p>

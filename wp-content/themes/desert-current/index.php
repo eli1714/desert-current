@@ -32,7 +32,7 @@ get_header();
 					?>
 				</div>
 
-				<?php the_posts_pagination(); ?>
+				<?php get_template_part( 'template-parts/components/pagination' ); ?>
 			<?php else : ?>
 				<?php get_template_part( 'template-parts/content/content', 'none' ); ?>
 			<?php endif; ?>
