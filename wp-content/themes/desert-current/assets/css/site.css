@@ -452,6 +452,10 @@ a:focus {
   gap: 1.5rem;
 }
 
+.story-grid--archive {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .event-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
@@ -1020,6 +1024,16 @@ a:focus {
   }
 
   .site-footer__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .story-grid--archive {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 40rem) {
+  .story-grid--archive {
     grid-template-columns: 1fr;
   }
 }

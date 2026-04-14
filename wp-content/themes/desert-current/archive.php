@@ -26,7 +26,7 @@ get_header();
 			?>
 
 			<?php if ( have_posts() ) : ?>
-				<div class="story-grid">
+				<div class="story-grid story-grid--archive">
 					<?php
 					while ( have_posts() ) :
 						the_post();
