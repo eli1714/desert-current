@@ -190,23 +190,39 @@ function desert_current_sort_event_archive( $query ) {
 }
 add_action( 'pre_get_posts', 'desert_current_sort_event_archive' );
 
+function desert_current_get_event_date_object( $event_date ) {
+	if ( ! $event_date ) {
+		return null;
+	}
+
+	$timezone = wp_timezone();
+	$date     = DateTimeImmutable::createFromFormat( 'Y-m-d', $event_date, $timezone );
+
+	if ( ! $date ) {
+		return null;
+	}
+
+	return $date->setTime( 12, 0, 0 );
+}
+
+function desert_current_format_event_date( $event_date, $format = 'F j, Y' ) {
+	$date = desert_current_get_event_date_object( $event_date );
+
+	if ( ! $date ) {
+		return '';
+	}
+
+	return $date->format( $format );
+}
+
 function desert_current_get_event_details( $post_id = 0 ) {
 	$post_id    = $post_id ? $post_id : get_the_ID();
 	$event_date = get_post_meta( $post_id, '_desert_current_event_date', true );
 	$location   = get_post_meta( $post_id, '_desert_current_event_location', true );
-	$formatted  = '';
-
-	if ( $event_date ) {
-		$timestamp = strtotime( $event_date );
-
-		if ( $timestamp ) {
-			$formatted = wp_date( 'F j, Y', $timestamp );
-		}
-	}
 
 	return array(
 		'date'      => $event_date,
-		'formatted' => $formatted,
+		'formatted' => desert_current_format_event_date( $event_date ),
 		'location'  => $location,
 	);
 }

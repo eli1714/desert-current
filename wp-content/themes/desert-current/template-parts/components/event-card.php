@@ -11,13 +11,12 @@ if ( ! empty( $args ) ) {
 	$event = $args;
 } else {
 	$event_details = desert_current_get_event_details();
-	$timestamp     = $event_details['date'] ? strtotime( $event_details['date'] ) : false;
 
 	$event = array(
-		'month'       => $timestamp ? wp_date( 'M', $timestamp ) : '',
-		'day'         => $timestamp ? wp_date( 'd', $timestamp ) : '',
+		'month'       => desert_current_format_event_date( $event_details['date'], 'M' ),
+		'day'         => desert_current_format_event_date( $event_details['date'], 'd' ),
 		'title'       => get_the_title(),
-		'schedule'    => $timestamp ? wp_date( 'l, F j, Y', $timestamp ) : '',
+		'schedule'    => desert_current_format_event_date( $event_details['date'], 'l, F j, Y' ),
 		'location'    => $event_details['location'],
 		'description' => get_the_excerpt(),
 		'link_label'  => __( 'Event details', 'desert-current' ),
