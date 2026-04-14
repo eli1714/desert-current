@@ -42,23 +42,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="site-header__nav-wrap">
-		<div class="container site-header__nav-inner">
-			<nav class="primary-nav" aria-label="<?php esc_attr_e( 'Primary menu', 'desert-current' ); ?>">
-				<?php
-				wp_nav_menu(
-					array(
-						'theme_location' => 'primary',
-						'container'      => false,
-						'menu_class'     => 'menu-list',
-						'fallback_cb'    => 'desert_current_menu_fallback',
-					)
-				);
-				?>
-			</nav>
+		<div class="container">
+			<div class="site-header__nav-bar">
+				<button class="site-header__menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav-panel">
+					<span class="site-header__menu-toggle-label"><?php esc_html_e( 'Menu', 'desert-current' ); ?></span>
+					<span class="site-header__menu-toggle-icon" aria-hidden="true"></span>
+				</button>
+			</div>
 
-			<a class="site-header__cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">
-				<?php esc_html_e( 'Send a tip', 'desert-current' ); ?>
-			</a>
+			<div class="site-header__nav-panel" id="primary-nav-panel">
+				<div class="site-header__nav-inner">
+					<nav class="primary-nav" aria-label="<?php esc_attr_e( 'Primary menu', 'desert-current' ); ?>">
+						<?php
+						wp_nav_menu(
+							array(
+								'theme_location' => 'primary',
+								'container'      => false,
+								'menu_class'     => 'menu-list',
+								'fallback_cb'    => 'desert_current_menu_fallback',
+							)
+						);
+						?>
+					</nav>
+
+					<a class="site-header__cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">
+						<?php esc_html_e( 'Send a tip', 'desert-current' ); ?>
+					</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </header>
