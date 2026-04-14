@@ -16,7 +16,8 @@ get_header();
 				'template-parts/components/page-header',
 				null,
 				array(
-					'title' => get_the_archive_title() ? get_the_archive_title() : __( 'Latest Stories', 'desert-current' ),
+					'title' => __( 'Stories', 'desert-current' ),
+					'intro' => __( 'Recent reporting on neighborhood news, culture, and the everyday changes shaping life across the region.', 'desert-current' ),
 					'level' => 'h1',
 				)
 			);
