@@ -13,6 +13,9 @@
   --max-width: 72rem;
   --reading-width: 46rem;
   --shadow: 0 12px 28px rgba(65, 54, 47, 0.08);
+  --shadow-hover: 0 20px 34px rgba(65, 54, 47, 0.1);
+  --transition-soft: 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-lift: 240ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 *,
@@ -253,6 +256,7 @@ a:focus {
   font-size: 0.98rem;
   font-weight: 600;
   letter-spacing: 0.01em;
+  transition: background-color var(--transition-soft), color var(--transition-soft);
 }
 
 .menu-list a:hover,
@@ -275,12 +279,18 @@ a:focus {
   font-weight: 700;
   letter-spacing: 0.01em;
   text-decoration: none;
+  transition:
+    background-color var(--transition-soft),
+    color var(--transition-soft),
+    border-color var(--transition-soft),
+    transform var(--transition-soft);
 }
 
 .site-header__cta:hover,
 .site-header__cta:focus {
   background: var(--sun);
   color: var(--white);
+  transform: translateY(-1px);
 }
 
 .button-link,
@@ -298,12 +308,19 @@ a:focus {
   border-radius: 999px;
   background: var(--sun);
   color: var(--white);
+  transition:
+    background-color var(--transition-soft),
+    color var(--transition-soft),
+    transform var(--transition-soft),
+    box-shadow var(--transition-soft);
 }
 
 .button-link:hover,
 .button-link:focus {
   color: var(--white);
   background: var(--sun-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 18px rgba(156, 71, 23, 0.15);
 }
 
 .button-link--light {
@@ -372,6 +389,7 @@ a:focus {
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
+  transition: transform var(--transition-lift), filter var(--transition-soft);
 }
 
 .featured-story__content {
@@ -396,6 +414,18 @@ a:focus {
 
 .featured-story__title a {
   text-decoration: none;
+  transition: color var(--transition-soft);
+}
+
+.featured-story:hover .featured-story__image,
+.featured-story:focus-within .featured-story__image {
+  transform: scale(1.015);
+  filter: saturate(1.03);
+}
+
+.featured-story:hover .featured-story__title a,
+.featured-story:focus-within .featured-story__title a {
+  color: var(--sun-dark);
 }
 
 .content-section {
@@ -468,16 +498,23 @@ a:focus {
   background: var(--white);
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
+  overflow: hidden;
+  transition:
+    transform var(--transition-lift),
+    box-shadow var(--transition-lift),
+    border-color var(--transition-soft);
 }
 
 .story-card__image-link {
   display: block;
+  overflow: hidden;
 }
 
 .story-card__image {
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
+  transition: transform var(--transition-lift), filter var(--transition-soft);
 }
 
 .story-card__content {
@@ -509,11 +546,25 @@ a:focus {
 
 .story-card__title a {
   text-decoration: none;
+  transition: color var(--transition-soft);
 }
 
 .story-card__title a:hover,
 .story-card__title a:focus {
   color: var(--sun-dark);
+}
+
+.story-card:hover,
+.story-card:focus-within {
+  transform: translateY(-0.18rem);
+  border-color: rgba(208, 109, 49, 0.24);
+  box-shadow: var(--shadow-hover);
+}
+
+.story-card:hover .story-card__image,
+.story-card:focus-within .story-card__image {
+  transform: scale(1.02);
+  filter: saturate(1.03);
 }
 
 .story-card__excerpt,
@@ -542,7 +593,10 @@ a:focus {
   height: 100%;
   padding: 1.5rem;
   overflow: hidden;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  transition:
+    transform var(--transition-lift),
+    box-shadow var(--transition-lift),
+    border-color var(--transition-soft);
 }
 
 .event-card::before {
@@ -555,9 +609,9 @@ a:focus {
 
 .event-card:hover,
 .event-card:focus-within {
-  transform: translateY(-0.2rem);
+  transform: translateY(-0.18rem);
   border-color: rgba(208, 109, 49, 0.35);
-  box-shadow: 0 18px 34px rgba(65, 54, 47, 0.12);
+  box-shadow: var(--shadow-hover);
 }
 
 .event-card__date {
@@ -618,6 +672,7 @@ a:focus {
 
 .event-card__title-link {
   text-decoration: none;
+  transition: color var(--transition-soft);
 }
 
 .event-card__title-link:hover,
@@ -643,11 +698,13 @@ a:focus {
 .event-card .text-link {
   margin-top: 0.35rem;
   color: var(--sun-dark);
+  transition: color var(--transition-soft), transform var(--transition-soft);
 }
 
 .event-card .text-link:hover,
 .event-card .text-link:focus {
   color: var(--sun);
+  transform: translateX(2px);
 }
 
 .spotlight-card {
@@ -879,6 +936,7 @@ a:focus {
 
 .footer-menu a {
   color: rgba(255, 255, 255, 0.88);
+  transition: color var(--transition-soft);
 }
 
 .footer-menu a:hover,
@@ -1040,6 +1098,17 @@ a:focus {
 
 @media (prefers-reduced-motion: reduce) {
   .event-card,
+  .story-card,
+  .featured-story__image,
+  .story-card__image,
+  .site-header__cta,
+  .button-link,
+  .menu-list a,
+  .event-card .text-link,
+  .event-card__title-link,
+  .story-card__title a,
+  .featured-story__title a,
+  .footer-menu a,
   .has-js .site-header__nav-panel {
     transition: none;
   }
