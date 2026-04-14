@@ -32,15 +32,6 @@ $posts_page_id = (int) get_option( 'page_for_posts' );
 $stories_url   = $posts_page_id ? get_permalink( $posts_page_id ) : home_url( '/' );
 $events_url    = get_post_type_archive_link( 'event' );
 
-$latest_articles = new WP_Query(
-	array(
-		'posts_per_page'      => 6,
-		'ignore_sticky_posts' => true,
-		'post__not_in'        => array_merge( $hero_story_ids, $top_story_ids ),
-		'post_status'         => 'publish',
-	)
-);
-
 $featured_events = new WP_Query(
 	array(
 		'post_type'      => 'event',
@@ -133,7 +124,9 @@ $newsletter_callout = array(
 				null,
 				array(
 					'title' => __( 'Top Stories', 'desert-current' ),
-					'intro' => __( 'A focused row of recent stories makes the homepage feel like a real local publication instead of a generic landing page.', 'desert-current' ),
+					'intro' => __( 'The stories shaping conversation right now, from public updates to local culture and community life.', 'desert-current' ),
+					'action_label' => __( 'View all stories', 'desert-current' ),
+					'action_url'   => $stories_url,
 				)
 			);
 			?>
@@ -222,35 +215,6 @@ $newsletter_callout = array(
 					<?php get_template_part( 'template-parts/components/newsletter-callout', null, $newsletter_callout ); ?>
 				</div>
 			</div>
-		</div>
-	</section>
-
-	<section class="content-section">
-		<div class="container">
-			<?php
-			get_template_part(
-				'template-parts/components/page-header',
-				null,
-				array(
-					'title' => __( 'Latest Articles', 'desert-current' ),
-					'intro' => __( 'This grid gives the homepage useful depth without making it feel overloaded.', 'desert-current' ),
-				)
-			);
-			?>
-
-			<?php if ( $latest_articles->have_posts() ) : ?>
-				<div class="story-grid">
-					<?php
-					while ( $latest_articles->have_posts() ) :
-						$latest_articles->the_post();
-						get_template_part( 'template-parts/content/content', 'excerpt' );
-					endwhile;
-					wp_reset_postdata();
-					?>
-				</div>
-			<?php else : ?>
-				<?php get_template_part( 'template-parts/content/content', 'none' ); ?>
-			<?php endif; ?>
 		</div>
 	</section>
 </main>
