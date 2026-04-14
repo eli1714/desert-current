@@ -28,6 +28,9 @@ $top_stories = new WP_Query(
 
 $top_story_ids = wp_list_pluck( $top_stories->posts, 'ID' );
 
+$posts_page_id = (int) get_option( 'page_for_posts' );
+$stories_url   = $posts_page_id ? get_permalink( $posts_page_id ) : home_url( '/' );
+
 $latest_articles = new WP_Query(
 	array(
 		'posts_per_page'      => 6,
@@ -40,7 +43,7 @@ $latest_articles = new WP_Query(
 $featured_events = array(
 	array(
 		'month'       => 'APR',
-		'day'         => '18',
+		'day'         => '17',
 		'title'       => 'Desert Sounds on Main Street',
 		'schedule'    => 'Friday, 6:30 PM to 9:00 PM',
 		'location'    => 'Main Street Plaza',
@@ -50,7 +53,7 @@ $featured_events = array(
 	),
 	array(
 		'month'       => 'APR',
-		'day'         => '20',
+		'day'         => '19',
 		'title'       => 'West Mesa Makers Market',
 		'schedule'    => 'Sunday, 8:00 AM to 1:00 PM',
 		'location'    => 'West Mesa Community Park',
@@ -60,7 +63,7 @@ $featured_events = array(
 	),
 	array(
 		'month'       => 'APR',
-		'day'         => '24',
+		'day'         => '23',
 		'title'       => 'Public Art Walk and Panel',
 		'schedule'    => 'Thursday, 7:00 PM',
 		'location'    => 'Rail Yard Arts District',
@@ -91,10 +94,28 @@ $newsletter_callout = array(
 <main id="main-content" class="site-main">
 	<section class="hero-section">
 		<div class="container hero-layout">
-			<div class="hero-copy">
-				<p class="eyebrow"><?php esc_html_e( 'Local stories, culture, and community', 'desert-current' ); ?></p>
-				<h1><?php bloginfo( 'name' ); ?></h1>
-				<p class="hero-text"><?php esc_html_e( 'Independent coverage of neighborhood news, local events, public life, and the creative energy shaping a desert city.', 'desert-current' ); ?></p>
+			<div class="hero-copy-wrap">
+				<div class="hero-copy">
+					<p class="eyebrow"><?php esc_html_e( 'Local stories, culture, and community', 'desert-current' ); ?></p>
+					<p class="hero-copy__kicker"><?php esc_html_e( 'A desert city newsroom with a neighborhood point of view', 'desert-current' ); ?></p>
+					<h1><?php bloginfo( 'name' ); ?></h1>
+					<p class="hero-text"><?php esc_html_e( 'Independent coverage of neighborhood news, local events, public life, and the creative energy shaping a desert city.', 'desert-current' ); ?></p>
+					<div class="hero-copy__actions">
+						<a class="button-link" href="<?php echo esc_url( $stories_url ); ?>"><?php esc_html_e( 'Read latest stories', 'desert-current' ); ?></a>
+						<a class="hero-copy__secondary-link" href="#home-rail"><?php esc_html_e( 'Explore community highlights', 'desert-current' ); ?></a>
+					</div>
+				</div>
+
+				<div class="hero-notes">
+					<div class="hero-note">
+						<span class="hero-note__label"><?php esc_html_e( 'This week', 'desert-current' ); ?></span>
+						<span class="hero-note__value"><?php esc_html_e( 'Neighborhood news, civic updates, and culture worth showing up for.', 'desert-current' ); ?></span>
+					</div>
+					<div class="hero-note">
+						<span class="hero-note__label"><?php esc_html_e( 'Editorial focus', 'desert-current' ); ?></span>
+						<span class="hero-note__value"><?php esc_html_e( 'Stories that feel specific, local, and close to daily life.', 'desert-current' ); ?></span>
+					</div>
+				</div>
 			</div>
 
 			<div class="hero-story">
@@ -131,12 +152,38 @@ $newsletter_callout = array(
 			?>
 
 			<?php if ( $top_stories->have_posts() ) : ?>
-				<div class="story-grid">
+				<div class="top-stories-layout">
 					<?php
+					$top_story_count = 0;
+
 					while ( $top_stories->have_posts() ) :
 						$top_stories->the_post();
-						get_template_part( 'template-parts/content/content', 'excerpt' );
+
+						++$top_story_count;
+
+						if ( 1 === $top_story_count ) :
+							?>
+							<div class="top-stories-layout__lead">
+								<?php get_template_part( 'template-parts/content/content', 'excerpt' ); ?>
+							</div>
+							<?php
+						else :
+							if ( 2 === $top_story_count ) :
+								?>
+								<div class="top-stories-layout__stack">
+								<?php
+							endif;
+
+							get_template_part( 'template-parts/content/content', 'compact' );
+						endif;
 					endwhile;
+
+					if ( $top_story_count > 1 ) :
+						?>
+						</div>
+						<?php
+					endif;
+
 					wp_reset_postdata();
 					?>
 				</div>
@@ -167,15 +214,17 @@ $newsletter_callout = array(
 		</div>
 	</section>
 
-	<section class="content-section">
+	<section class="content-section content-section--rail" id="home-rail">
 		<div class="container">
-			<?php get_template_part( 'template-parts/components/community-spotlight', null, $community_spotlight ); ?>
-		</div>
-	</section>
+			<div class="home-rail">
+				<div class="home-rail__spotlight">
+					<?php get_template_part( 'template-parts/components/community-spotlight', null, $community_spotlight ); ?>
+				</div>
 
-	<section class="content-section section-dark">
-		<div class="container">
-			<?php get_template_part( 'template-parts/components/newsletter-callout', null, $newsletter_callout ); ?>
+				<div class="home-rail__newsletter">
+					<?php get_template_part( 'template-parts/components/newsletter-callout', null, $newsletter_callout ); ?>
+				</div>
+			</div>
 		</div>
 	</section>
 
