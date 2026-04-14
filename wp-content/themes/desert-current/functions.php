@@ -38,9 +38,16 @@ function desert_current_enqueue_assets() {
 	$theme = wp_get_theme();
 
 	wp_enqueue_style(
+		'desert-current-fonts',
+		'https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Source+Sans+3:wght@400;500;600;700&display=swap',
+		array(),
+		null
+	);
+
+	wp_enqueue_style(
 		'desert-current-styles',
 		get_template_directory_uri() . '/assets/css/site.css',
-		array(),
+		array( 'desert-current-fonts' ),
 		$theme->get( 'Version' )
 	);
 

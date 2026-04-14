@@ -8,6 +8,8 @@
   --sky: #f8f6f1;
   --border: #d8cfc2;
   --white: #ffffff;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-sans: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
   --max-width: 72rem;
   --reading-width: 46rem;
   --shadow: 0 12px 28px rgba(65, 54, 47, 0.08);
@@ -25,7 +27,8 @@ html {
 
 body {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
   line-height: 1.6;
   color: var(--stone);
   background: var(--sky);
@@ -110,6 +113,7 @@ a:focus {
 .site-header__date,
 .site-footer__meta {
   margin: 0;
+  font-family: var(--font-sans);
   font-size: 0.82rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -144,6 +148,7 @@ a:focus {
 
 .site-branding__eyebrow,
 .site-footer__eyebrow {
+  font-family: var(--font-sans);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -153,6 +158,7 @@ a:focus {
 
 .site-title__main {
   display: inline-block;
+  font-family: var(--font-serif);
   font-size: clamp(2.1rem, 4vw, 3.75rem);
   line-height: 0.95;
   font-weight: 700;
@@ -169,7 +175,9 @@ a:focus {
 
 .site-tagline {
   max-width: 34rem;
+  font-family: var(--font-sans);
   font-size: 1rem;
+  line-height: 1.5;
 }
 
 .site-header__nav-wrap {
@@ -204,8 +212,10 @@ a:focus {
   min-height: 2.75rem;
   padding: 0 0.7rem;
   border-radius: 999px;
+  font-family: var(--font-sans);
   font-size: 0.98rem;
   font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .menu-list a:hover,
@@ -223,8 +233,10 @@ a:focus {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.78);
   color: var(--sun-dark);
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 700;
+  letter-spacing: 0.01em;
   text-decoration: none;
 }
 
@@ -239,6 +251,7 @@ a:focus {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  font-family: var(--font-sans);
   font-weight: 600;
   text-decoration: none;
 }
@@ -281,15 +294,18 @@ a:focus {
 
 .eyebrow {
   margin: 0 0 0.75rem;
+  font-family: var(--font-sans);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.8rem;
+  font-weight: 700;
   color: var(--sun);
 }
 
 .hero-copy h1,
 .entry-title,
 .section-title {
+  font-family: var(--font-serif);
   line-height: 1.1;
 }
 
@@ -300,7 +316,8 @@ a:focus {
 
 .hero-text {
   max-width: 38rem;
-  font-size: 1.125rem;
+  font-size: 1.2rem;
+  line-height: 1.55;
 }
 
 .hero-story__placeholder,
@@ -336,6 +353,7 @@ a:focus {
 .spotlight-card__title,
 .newsletter-callout__title {
   margin: 0.5rem 0 1rem;
+  font-family: var(--font-serif);
   line-height: 1.1;
 }
 
@@ -369,12 +387,26 @@ a:focus {
 .section-title {
   margin: 0 0 0.5rem;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 600;
 }
 
 .section-intro,
 .entry-meta,
 .story-card__meta {
   margin: 0;
+}
+
+.section-intro,
+.story-card__meta,
+.featured-story__meta,
+.event-card__meta,
+.event-card__location,
+.entry-meta,
+.site-footer__heading,
+.footer-menu a,
+.site-footer__list,
+.site-footer__text {
+  font-family: var(--font-sans);
 }
 
 .story-grid {
@@ -418,6 +450,16 @@ a:focus {
 
 .story-card__title a {
   text-decoration: none;
+}
+
+.story-card__excerpt,
+.entry-content,
+.featured-story__excerpt,
+.event-card__description,
+.spotlight-card__description,
+.newsletter-callout__description {
+  font-size: 1.04rem;
+  line-height: 1.65;
 }
 
 .event-card,
@@ -497,6 +539,7 @@ a:focus {
 }
 
 .event-card__meta {
+  font-family: var(--font-sans);
   font-size: 0.92rem;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -504,6 +547,7 @@ a:focus {
 
 .event-card__title {
   margin: 0;
+  font-family: var(--font-serif);
   font-size: 1.85rem;
   line-height: 1.15;
 }
@@ -523,6 +567,7 @@ a:focus {
 }
 
 .event-card__location {
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 600;
 }
@@ -609,6 +654,7 @@ a:focus {
 
 .site-footer__title {
   margin-top: 0.6rem;
+  font-family: var(--font-serif);
   font-size: clamp(1.8rem, 3vw, 2.6rem);
   line-height: 1.05;
 }
@@ -621,6 +667,7 @@ a:focus {
 
 .site-footer__heading {
   margin-bottom: 1rem;
+  font-family: var(--font-sans);
   font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.14em;
