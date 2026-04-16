@@ -25,7 +25,7 @@ $link_url    = $args['link_url'] ?? '';
 			<p class="spotlight-card__meta"><?php echo esc_html( $meta ); ?></p>
 		<?php endif; ?>
 
-		<p class="spotlight-card__description"><?php echo esc_html( $description ); ?></p>
+		<div class="spotlight-card__description"><?php echo wp_kses_post( $description ); ?></div>
 
 		<?php if ( $link_label && $link_url ) : ?>
 			<a class="button-link" href="<?php echo esc_url( $link_url ); ?>"><?php echo esc_html( $link_label ); ?></a>

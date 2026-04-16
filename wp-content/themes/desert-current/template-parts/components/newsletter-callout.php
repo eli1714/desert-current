@@ -19,7 +19,7 @@ $link_url    = $args['link_url'] ?? '';
 		<?php endif; ?>
 
 		<h2 class="newsletter-callout__title"><?php echo esc_html( $title ); ?></h2>
-		<p class="newsletter-callout__description"><?php echo esc_html( $description ); ?></p>
+		<div class="newsletter-callout__description"><?php echo wp_kses_post( $description ); ?></div>
 	</div>
 
 	<?php if ( $link_label && $link_url ) : ?>

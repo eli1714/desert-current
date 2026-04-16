@@ -8,15 +8,27 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+$footer_title          = get_field( 'footer_title', 'option' );
+$footer_description    = get_field( 'footer_description', 'option' );
+$footer_button_label   = get_field( 'footer_button_label', 'option' );
+$footer_button_url     = get_field( 'footer_button_url', 'option' );
+$footer_bottom_message = get_field( 'footer_bottom_message', 'option' );
 ?>
 
 <footer class="site-footer">
 	<div class="container site-footer__inner">
 		<div class="site-footer__brand">
 			<p class="site-footer__eyebrow"><?php esc_html_e( 'Desert Current', 'desert-current' ); ?></p>
-			<h2 class="site-footer__title"><?php esc_html_e( 'Local reporting rooted in place.', 'desert-current' ); ?></h2>
-			<p class="site-footer__text"><?php esc_html_e( 'Stories about public life, culture, small businesses, and the everyday changes shaping a desert community.', 'desert-current' ); ?></p>
-			<a class="button-link" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Get in touch', 'desert-current' ); ?></a>
+			<?php if ( $footer_title ) : ?>
+				<h2 class="site-footer__title"><?php echo esc_html( $footer_title ); ?></h2>
+			<?php endif; ?>
+			<?php if ( $footer_description ) : ?>
+				<div class="site-footer__text"><?php echo wp_kses_post( $footer_description ); ?></div>
+			<?php endif; ?>
+			<?php if ( $footer_button_label && $footer_button_url ) : ?>
+				<a class="button-link" href="<?php echo esc_url( $footer_button_url ); ?>"><?php echo esc_html( $footer_button_label ); ?></a>
+			<?php endif; ?>
 		</div>
 
 		<div class="site-footer__column">
@@ -49,7 +61,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="site-footer__bottom">
 		<div class="container site-footer__bottom-inner">
 			<p class="site-footer__meta"><?php echo esc_html( '© ' . wp_date( 'Y' ) . ' ' . get_bloginfo( 'name' ) . '.' ); ?></p>
-			<p class="site-footer__meta"><?php esc_html_e( 'Story tips, event listings, and community updates are always welcome.', 'desert-current' ); ?></p>
+			<?php if ( $footer_bottom_message ) : ?>
+				<p class="site-footer__meta"><?php echo esc_html( $footer_bottom_message ); ?></p>
+			<?php endif; ?>
 		</div>
 	</div>
 </footer>

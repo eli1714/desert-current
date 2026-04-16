@@ -7,6 +7,8 @@
 
 get_header();
 
+$front_page_id = get_queried_object_id();
+
 $hero_story = new WP_Query(
 	array(
 		'posts_per_page'      => 1,
@@ -37,12 +39,12 @@ $featured_events = new WP_Query(
 		'post_type'      => 'event',
 		'posts_per_page' => 3,
 		'post_status'    => 'publish',
-		'meta_key'       => '_desert_current_event_date',
+		'meta_key'       => 'event_date',
 		'orderby'        => 'meta_value',
 		'order'          => 'ASC',
 		'meta_query'     => array(
 			array(
-				'key'     => '_desert_current_event_date',
+				'key'     => 'event_date',
 				'value'   => current_time( 'Y-m-d' ),
 				'compare' => '>=',
 				'type'    => 'DATE',
@@ -51,21 +53,33 @@ $featured_events = new WP_Query(
 	)
 );
 
+$hero_content = array(
+	'eyebrow'              => get_field( 'home_hero_eyebrow', $front_page_id ),
+	'kicker'               => get_field( 'home_hero_kicker', $front_page_id ),
+	'intro'                => get_field( 'home_hero_intro', $front_page_id ),
+	'primary_link_label'   => __( 'Read latest stories', 'desert-current' ),
+	'primary_link_url'     => $stories_url,
+	'secondary_link_label' => __( 'Explore community highlights', 'desert-current' ),
+	'secondary_link_url'   => '#home-rail',
+);
+
+$hero_notes = desert_current_get_home_hero_notes( $front_page_id );
+
 $community_spotlight = array(
 	'eyebrow'      => 'Community Spotlight',
-	'title'        => 'Neighbors Turn an Empty Corner Into a Weekend Garden Share',
-	'description'  => 'What started as a small volunteer cleanup turned into a regular gathering spot with donated plants, seed swaps, and free gardening tips for first-time growers.',
-	'meta'         => 'South Ridge Neighborhood',
-	'link_label'   => 'Read the spotlight',
-	'link_url'     => home_url( '/category/community/' ),
+	'title'        => get_field( 'home_spotlight_title', $front_page_id ),
+	'description'  => get_field( 'home_spotlight_description', $front_page_id ),
+	'meta'         => get_field( 'home_spotlight_meta', $front_page_id ),
+	'link_label'   => get_field( 'home_spotlight_link_label', $front_page_id ),
+	'link_url'     => get_field( 'home_spotlight_link_url', $front_page_id ),
 );
 
 $newsletter_callout = array(
 	'eyebrow'      => 'Stay in the Loop',
-	'title'        => 'Get the week\'s most useful local stories in one short update.',
-	'description'  => 'Later we can connect this area to a real form. For now, it works as a realistic newsletter callout and portfolio-friendly CTA.',
-	'link_label'   => 'Visit the contact page',
-	'link_url'     => home_url( '/contact/' ),
+	'title'        => get_field( 'home_newsletter_title', $front_page_id ),
+	'description'  => get_field( 'home_newsletter_description', $front_page_id ),
+	'link_label'   => get_field( 'home_newsletter_link_label', $front_page_id ),
+	'link_url'     => get_field( 'home_newsletter_link_url', $front_page_id ),
 );
 ?>
 
@@ -74,26 +88,32 @@ $newsletter_callout = array(
 		<div class="container hero-layout">
 			<div class="hero-copy-wrap">
 				<div class="hero-copy">
-					<p class="eyebrow"><?php esc_html_e( 'Local stories, culture, and community', 'desert-current' ); ?></p>
-					<p class="hero-copy__kicker"><?php esc_html_e( 'A desert city newsroom with a neighborhood point of view', 'desert-current' ); ?></p>
+					<?php if ( $hero_content['eyebrow'] ) : ?>
+						<p class="eyebrow"><?php echo esc_html( $hero_content['eyebrow'] ); ?></p>
+					<?php endif; ?>
+					<?php if ( $hero_content['kicker'] ) : ?>
+						<p class="hero-copy__kicker"><?php echo esc_html( $hero_content['kicker'] ); ?></p>
+					<?php endif; ?>
 					<h1><?php bloginfo( 'name' ); ?></h1>
-					<p class="hero-text"><?php esc_html_e( 'Independent coverage of neighborhood news, local events, public life, and the creative energy shaping a desert city.', 'desert-current' ); ?></p>
+					<?php if ( $hero_content['intro'] ) : ?>
+						<div class="hero-text"><?php echo wp_kses_post( $hero_content['intro'] ); ?></div>
+					<?php endif; ?>
 					<div class="hero-copy__actions">
-						<a class="button-link" href="<?php echo esc_url( $stories_url ); ?>"><?php esc_html_e( 'Read latest stories', 'desert-current' ); ?></a>
-						<a class="hero-copy__secondary-link" href="#home-rail"><?php esc_html_e( 'Explore community highlights', 'desert-current' ); ?></a>
+						<a class="button-link" href="<?php echo esc_url( $hero_content['primary_link_url'] ); ?>"><?php echo esc_html( $hero_content['primary_link_label'] ); ?></a>
+						<a class="hero-copy__secondary-link" href="<?php echo esc_url( $hero_content['secondary_link_url'] ); ?>"><?php echo esc_html( $hero_content['secondary_link_label'] ); ?></a>
 					</div>
 				</div>
 
-				<div class="hero-notes">
-					<div class="hero-note">
-						<span class="hero-note__label"><?php esc_html_e( 'This week', 'desert-current' ); ?></span>
-						<span class="hero-note__value"><?php esc_html_e( 'Neighborhood news, civic updates, and culture worth showing up for.', 'desert-current' ); ?></span>
+				<?php if ( $hero_notes ) : ?>
+					<div class="hero-notes">
+						<?php foreach ( $hero_notes as $hero_note ) : ?>
+							<div class="hero-note">
+								<span class="hero-note__label"><?php echo esc_html( $hero_note['label'] ); ?></span>
+								<span class="hero-note__value"><?php echo esc_html( $hero_note['value'] ); ?></span>
+							</div>
+						<?php endforeach; ?>
 					</div>
-					<div class="hero-note">
-						<span class="hero-note__label"><?php esc_html_e( 'Editorial focus', 'desert-current' ); ?></span>
-						<span class="hero-note__value"><?php esc_html_e( 'Stories that feel specific, local, and close to daily life.', 'desert-current' ); ?></span>
-					</div>
-				</div>
+				<?php endif; ?>
 			</div>
 
 			<div class="hero-story">
@@ -105,12 +125,6 @@ $newsletter_callout = array(
 					endwhile;
 					wp_reset_postdata();
 					?>
-				<?php else : ?>
-					<div class="hero-story__placeholder">
-						<p class="eyebrow"><?php esc_html_e( 'Lead Story', 'desert-current' ); ?></p>
-						<h2><?php esc_html_e( 'Your lead story will appear here once you publish your first post.', 'desert-current' ); ?></h2>
-						<p><?php esc_html_e( 'This space is meant for the most important story on the site. It gives the homepage a strong visual starting point.', 'desert-current' ); ?></p>
-					</div>
 				<?php endif; ?>
 			</div>
 		</div>

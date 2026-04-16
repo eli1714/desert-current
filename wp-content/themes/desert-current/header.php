@@ -8,6 +8,11 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+$header_edition = get_field( 'header_edition_label', 'option' );
+$brand_eyebrow  = get_field( 'brand_eyebrow', 'option' );
+$tip_link_label = get_field( 'tip_link_label', 'option' );
+$tip_link_url   = get_field( 'tip_link_url', 'option' );
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -24,14 +29,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 <header class="site-header">
 	<div class="site-header__topbar">
 		<div class="container site-header__topbar-inner">
-			<p class="site-header__edition"><?php esc_html_e( 'Desert Southwest Edition', 'desert-current' ); ?></p>
+			<?php if ( $header_edition ) : ?>
+				<p class="site-header__edition"><?php echo esc_html( $header_edition ); ?></p>
+			<?php endif; ?>
 			<p class="site-header__date"><?php echo esc_html( wp_date( 'l, F j, Y' ) ); ?></p>
 		</div>
 	</div>
 
 	<div class="container site-header__inner">
 		<div class="site-branding">
-			<p class="site-branding__eyebrow"><?php esc_html_e( 'Independent Local Media', 'desert-current' ); ?></p>
+			<?php if ( $brand_eyebrow ) : ?>
+				<p class="site-branding__eyebrow"><?php echo esc_html( $brand_eyebrow ); ?></p>
+			<?php endif; ?>
 			<p class="site-title">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 					<span class="site-title__main"><?php bloginfo( 'name' ); ?></span>
@@ -65,9 +74,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 					</nav>
 
-					<a class="site-header__cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">
-						<?php esc_html_e( 'Send a tip', 'desert-current' ); ?>
-					</a>
+					<?php if ( $tip_link_label && $tip_link_url ) : ?>
+						<a class="site-header__cta" href="<?php echo esc_url( $tip_link_url ); ?>">
+							<?php echo esc_html( $tip_link_label ); ?>
+						</a>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
